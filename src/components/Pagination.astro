@@ -7,6 +7,13 @@ interface Props {
     disablePrevious: boolean;
     disableNext: boolean;
 }
+
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+const firstFivePages = pages.slice(0,5)
+const remainingPages = pages.length > 5 ? pages.slice(5) : []
+
+console.log(remainingPages)
+
 ---
 <div class="flex justify-between mt-10">
     
@@ -15,6 +22,28 @@ interface Props {
     }>
       Previous
     </a>
+
+    <div class="pagination-pages flex gap-2">
+       
+        {firstFivePages.map(page => (
+            <a href={'/articles?page=' + (page)} class={
+                page === currentPage
+                ? 'inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg pointer-events-none' // Disable the link for the current page
+                : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg' // Style for other pages
+            }>
+      {page}
+    </a>
+        ))}
+
+{remainingPages.length > 0 && (
+    <div class="cursor-pointer inline-block bg-indigo-100 px-3 py-2 rounded-lg">
+        ...
+        {/* You can implement a dropdown or a modal to select a page from remainingPages */}
+    </div>
+)}
+
+    </div>
+    
     <a href={'/articles?page=' + (currentPage + 1)} class={
         disableNext ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
     }>
