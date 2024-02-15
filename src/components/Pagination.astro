@@ -15,7 +15,7 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
 
 
 ---
-<div x-data="{ showPopup: false }" class="flex justify-between mt-10">
+<div class="flex justify-between mt-10">
     
     <a href={'/articles?page=' + (currentPage - 1)} class={
         disablePrevious ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
@@ -41,8 +41,9 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
     </a>
         ))}
 
+<!-- PAGINATION ALPINE COMPONENT -->
 {remainingPages.length > 0 && (
-    <div class="relative inline-block">
+    <div x-data="{ showPopup: false }" class="relative inline-block">
             <button @click="showPopup = !showPopup" class="cursor-pointer bg-indigo-100 px-3 py-2 rounded-lg">
                 ...
             </button>
@@ -52,7 +53,7 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
                     {remainingPages.map(page => (
                         <a href={'/articles?page=' + page} @click="showPopup = false" class={
                         page === currentPage
-                        ? 'block px-4 py-2 text-sm text-gray-700 text-indigo-600' // Keep hover style for current page
+                        ? 'block px-4 py-2 text-sm  text-indigo-600' // Keep hover style for current page
                         : 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900' // Style for other pages
                         } role="menuitem" >
                             Page {page}
@@ -78,12 +79,20 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
     }>
       Next
     </a>
-  </div>
+  
 
 
   <!-- AlpineJS initialisation -->
   <script>
     import Alpine from 'alpinejs';
     Alpine.start();
+
+    function updatePages(currentPage) {
+
+        if (currentPage < 7 ) {
+
+        }
+
+    }
   </script>
 
