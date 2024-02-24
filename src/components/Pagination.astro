@@ -11,14 +11,35 @@ interface Props {
 
 const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 const firstFivePages = pages.slice(0,5)
-const remainingPages = pages.length > 5 ? pages.slice(5) : []
+
+// Calculate dynamic range for pages around current page
+const visiblePagesLimit = 5;
+let startPage = Math.max(currentPage - 2, 1);
+let endPage = startPage + visiblePagesLimit - 1;
+if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(endPage - visiblePagesLimit + 1, 1);
+}
+
+const visiblePages = Array.from({ length: Math.min(visiblePagesLimit, totalPages) }, (_, i) => startPage + i);
+
+// Determine remaining pages for dropdown, excluding the current visible range
+const remainingPages = Array.from({ length: totalPages }, (_, i) => i + 1)
+    .filter(page => !visiblePages.includes(page));
+
+// Function to update pages when a page is selected from remainingPages
+const handleSelectPage = (selectedPage: number) => {
+    // Logic to update the page range based on selected page
+    // This part is more conceptual since actual navigation and state management
+    // would depend on how you implement page changes in Astro
+};
 
 
 ---
-<div class="flex justify-between mt-10">
+<div class="flex justify-center mt-10">
     
     <a href={'/articles?page=' + (currentPage - 1)} class={
-        disablePrevious ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
+        disablePrevious ? 'pointer-events-none hidden sm:inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'hidden sm:inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg me-2'
     }>
       Previous
     </a>
@@ -26,46 +47,42 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
     <div class="pagination-pages flex gap-2">
 
         <a href={'/articles?page=' + (firstFivePages[0])} class={
-            disablePrevious ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
+            disablePrevious ? 'pointer-events-none hidden sm:inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'hidden sm:inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
         }>
           First
         </a>
        
-        {firstFivePages.map(page => (
-            <a href={'/articles?page=' + (page)} class={
+         <!-- Visible Pages -->
+    <div class="pagination-pages flex gap-2">
+        {visiblePages.map(page => (
+            <a href={'/articles?page=' + page} class={
                 page === currentPage
-                ? 'inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg pointer-events-none' // Disable the link for the current page
-                : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg' // Style for other pages
+                ? 'inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg pointer-events-none'
+                : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
             }>
-      {page}
-    </a>
+                {page}
+            </a>
         ))}
 
-<!-- PAGINATION ALPINE COMPONENT -->
-{remainingPages.length > 0 && (
-    <div x-data="{ showPopup: false }" class="relative inline-block">
-            <button @click="showPopup = !showPopup" class="cursor-pointer bg-indigo-100 px-3 py-2 rounded-lg">
-                ...
-            </button>
-
-            <div x-show="showPopup" @click.away="showPopup = false" x-transition.duration.300ms class="absolute z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                <div class="py-1" role="menu" aria-orientation="vertical">
-                    {remainingPages.map(page => (
-                        <a href={'/articles?page=' + page} @click="showPopup = false" class={
-                        page === currentPage
-                        ? 'block px-4 py-2 text-sm  text-indigo-600' // Keep hover style for current page
-                        : 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900' // Style for other pages
-                        } role="menuitem" >
-                            Page {page}
-                        </a>
-                    ))}
+        <!-- Remaining Pages Dropdown/Popup -->
+        {remainingPages.length > 0 && (
+            <div x-data="{ showPopup: false }" class="relative inline-block">
+                <button @click="showPopup = !showPopup" class="cursor-pointer bg-indigo-100 px-3 py-2 rounded-lg">...</button>
+                <div x-show="showPopup" @click.away="showPopup = false" x-transition.duration.300ms class="absolute z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div class="py-1" role="menu" aria-orientation="vertical">
+                        {remainingPages.map(page => (
+                            <a href={'/articles?page=' + page} @click="showPopup = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                Page {page}
+                            </a>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
-    )}
+        )}
+    </div>
 
 <a href={'/articles?page=' + (remainingPages[remainingPages.length - 1])} class={
-    disableNext ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
+    disableNext ? 'pointer-events-none hidden sm:inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'hidden sm:inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
 }>
   Last
 </a>
@@ -75,7 +92,7 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
 
     
     <a href={'/articles?page=' + (currentPage + 1)} class={
-        disableNext ? 'pointer-events-none inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
+        disableNext ? 'pointer-events-none hidden sm:inline-block bg-gray-100 text-gray-400 px-3 py-2 rounded-lg' : 'ms-2 hidden sm:inline-block bg-indigo-100 px-3 py-2 hover:bg-indigo-600 hover:text-white rounded-lg'
     }>
       Next
     </a>
@@ -87,12 +104,6 @@ const remainingPages = pages.length > 5 ? pages.slice(5) : []
     import Alpine from 'alpinejs';
     Alpine.start();
 
-    function updatePages(currentPage) {
 
-        if (currentPage < 7 ) {
-
-        }
-
-    }
   </script>
 
