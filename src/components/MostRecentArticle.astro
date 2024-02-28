@@ -8,7 +8,7 @@ interface Props {
     article: CollectionEntry<'blog'>;
 }
 ---
-<div class="relative inline-block w-full sm:w-auto cursor-pointer rounded-2xl">
+<div class="relative flex flex-col justify-center w-full sm:w-auto cursor-pointer rounded-2xl">
     <a class="flex flex-row justify-center" href={`/articles/${article.slug}`}>
     <img src={'/images/' + article.data.image}  alt="Article Image" class="w-full h-auto rounded-2xl" style="max-width: 300px !important;"/>
 

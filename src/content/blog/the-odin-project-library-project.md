@@ -91,3 +91,5 @@ I'll admit, after everything, I struggled with the prototype method the most, as
 ## Conclusion
 
 It was certainly a humble reminder that there's always something to improve on, even the 'basics'. Admittedly, I was quite demoralised when I realised that I had become stuck on something that I thought I had an understanding of, but in the end, I was able to go back, break the problem into smaller chunks and complete the project from scratch. Now, this time I'll properly re-factor the constructor functions into ES6 classes!
+
+You can find my code <a target="_blank" href="https://github.com/Moomins07/project-library-revised-top" style="color: #312e81;">**here**.</a>
