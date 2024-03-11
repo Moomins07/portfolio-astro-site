@@ -63,7 +63,7 @@ I created functions such as 'getCircleTurn' that would specifically return "Conf
 
 You don't want people having direct access to your private data, that's a recipe for disaster.
 
-Overall, this has been a challenging project, starting from staring blankly at my screen and following YouTube tutorials to essentially re-writing it from the ground-up including more and more concepts as I go. It has however been extremely educational and I'll be using what I've learned in future projects. Obviously, it's not perfect, I've done a poor job of keeping functions to 'one responsibility' and some functions probably don't belong in a particular module, but it's all an improvement.
+Overall, this has been a challenging project, starting from staring blankly at my screen and following YouTube tutorials to essentially re-writing it from the ground-up including more and more concepts as I go. It has however been extremely educational and I'll be using what I've learned in future projects. Obviously, it's not perfect, I've done a poor job of keeping functions to 'one responsibility' and some functions probably don't belong in a particular module, I also should have considered creating another module that handles the players, but it's all an improvement regardless.
 
 ## So, in this project I've covered the following:<br>
 
